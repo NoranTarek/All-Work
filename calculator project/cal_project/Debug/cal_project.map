@@ -146,7 +146,7 @@ LOAD c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x2470
+.text           0x00000000     0x2508
  *(.vectors)
  .vectors       0x00000000       0x54 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
                 0x00000000                __vectors
@@ -299,32 +299,32 @@ LOAD c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\
  .text.LCD_invidSendCommend
                 0x00001cb0      0x1e0 ./LCD_Prog.o
  .text.CAL_u32SUM
-                0x00001e90       0xf6 ./cal.o
+                0x00001e90      0x158 ./cal.o
                 0x00001e90                CAL_u32SUM
  .text.CAL_u32SUB
-                0x00001f86       0xfa ./cal.o
-                0x00001f86                CAL_u32SUB
+                0x00001fe8       0xfa ./cal.o
+                0x00001fe8                CAL_u32SUB
  .text.CAL_u32MUL
-                0x00002080       0xfa ./cal.o
-                0x00002080                CAL_u32MUL
+                0x000020e2       0xfa ./cal.o
+                0x000020e2                CAL_u32MUL
  .text.CAL_u32DIV
-                0x0000217a       0xfa ./cal.o
-                0x0000217a                CAL_u32DIV
- .text.main     0x00002274      0x172 ./main.o
-                0x00002274                main
- .text.libgcc   0x000023e6       0x18 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodqi4.o)
-                0x000023e6                __udivmodqi4
- .text.libgcc   0x000023fe        0x0 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
- .text.libgcc   0x000023fe        0x0 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
- .text.libgcc   0x000023fe       0x38 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
-                0x000023fe                __prologue_saves__
- .text.libgcc   0x00002436       0x36 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
-                0x00002436                __epilogue_restores__
-                0x0000246c                . = ALIGN (0x2)
+                0x000021dc       0xfa ./cal.o
+                0x000021dc                CAL_u32DIV
+ .text.main     0x000022d6      0x1a8 ./main.o
+                0x000022d6                main
+ .text.libgcc   0x0000247e       0x18 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodqi4.o)
+                0x0000247e                __udivmodqi4
+ .text.libgcc   0x00002496        0x0 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x00002496        0x0 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc   0x00002496       0x38 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
+                0x00002496                __prologue_saves__
+ .text.libgcc   0x000024ce       0x36 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
+                0x000024ce                __epilogue_restores__
+                0x00002504                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000246c        0x0 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
-                0x0000246c                exit
-                0x0000246c                _exit
+ .fini9         0x00002504        0x0 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+                0x00002504                exit
+                0x00002504                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -343,11 +343,11 @@ LOAD c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000246c        0x4 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .fini0         0x00002504        0x4 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00002470                _etext = .
+                0x00002508                _etext = .
 
-.data           0x00800060       0x28 load address 0x00002470
+.data           0x00800060       0x28 load address 0x00002508
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800060        0x0 c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
@@ -419,8 +419,8 @@ LOAD c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\
  *(.bss*)
  *(COMMON)
                 0x00800088                PROVIDE (__bss_end, .)
-                0x00002470                __data_load_start = LOADADDR (.data)
-                0x00002498                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00002508                __data_load_start = LOADADDR (.data)
+                0x00002530                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800088        0x0
                 0x00800088                PROVIDE (__noinit_start, .)
@@ -445,21 +445,21 @@ LOAD c:/users/mylap/desktop/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\
 .signature
  *(.signature*)
 
-.stab           0x00000000     0x1fec
+.stab           0x00000000     0x20f4
  *(.stab)
  .stab          0x00000000      0x9e4 ./DIO_prog.o
  .stab          0x000009e4      0x27c ./KPD_prog.o
                                 0x324 (size before relaxing)
  .stab          0x00000c60      0xb4c ./LCD_Prog.o
                                 0xbf4 (size before relaxing)
- .stab          0x000017ac      0x594 ./cal.o
-                                0x618 (size before relaxing)
- .stab          0x00001d40      0x2ac ./main.o
-                                0x4e0 (size before relaxing)
+ .stab          0x000017ac      0x60c ./cal.o
+                                0x690 (size before relaxing)
+ .stab          0x00001db8      0x33c ./main.o
+                                0x570 (size before relaxing)
 
-.stabstr        0x00000000      0xc81
+.stabstr        0x00000000      0xccd
  *(.stabstr)
- .stabstr       0x00000000      0xc81 ./DIO_prog.o
+ .stabstr       0x00000000      0xccd ./DIO_prog.o
 
 .stab.excl
  *(.stab.excl)

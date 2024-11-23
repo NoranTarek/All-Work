@@ -63,7 +63,7 @@ int main(void)
 					switch(Local_u8OP)
 					{
 						case '+':
-							LCD_enuDisplayChar(CAL_u32SUM(Local_u8OP1,Local_u8OP2,counter1,counter2));
+							CAL_u32SUM(Local_u8OP1,Local_u8OP2,counter1,counter2,&Local_u8Res);
 							break;
 						case '-':
 							LCD_enuDisplayChar(CAL_u32SUB(Local_u8OP1,Local_u8OP2,counter1,counter2));
@@ -75,6 +75,8 @@ int main(void)
 							LCD_enuDisplayChar(CAL_u32DIV(Local_u8OP1,Local_u8OP2,counter1,counter2));
 							break;
 					}
+					for(int i = 0; i < sizeof(Local_u8Res); i++)
+						LCD_enuDisplayChar(Local_u8Res[i]);
 					Local_u8Flag = 3;
 			}
 			if(Local_u8Flag == 3)

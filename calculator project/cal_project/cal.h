@@ -11,7 +11,7 @@
 
 #define NUM_SIZE 4
 
-u8 CAL_u32SUM(u8 num1[],u8 num2[],u8 n, u8 m);
+u8 CAL_u32SUM(u8 num1[],u8 num2[],u8 n, u8 m,u8 *Res[NUM_SIZE]);
 
 u8 CAL_u32SUB(u8 num1[],u8 num2[],u8 n, u8 m);
 
