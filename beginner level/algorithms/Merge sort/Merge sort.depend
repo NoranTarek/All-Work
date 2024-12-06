@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1722944322 source:f:\engineering\cat\algorithms\merge sort\main.c
+	<stdio.h>
+	<stdlib.h>
+
+1722948005 source:f:\engineering\cat\all-work\algorithms\merge sort\main.c
+	<stdio.h>
+	<stdlib.h>
+
