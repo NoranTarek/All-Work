@@ -1,0 +1,1242 @@
+
+SPI.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000007a4  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000002  00800060  000007a4  00000838  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000008  00800062  00800062  0000083a  2**0
+                  ALLOC
+  3 .stab         0000099c  00000000  00000000  0000083c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  4 .stabstr      000006e7  00000000  00000000  000011d8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+   8:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+   c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  10:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  14:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  18:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  1c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  20:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  24:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  28:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  2c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  30:	0c 94 66 03 	jmp	0x6cc	; 0x6cc <__vector_12>
+  34:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  38:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  3c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  40:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  44:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  48:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  4c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  50:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_copy_data>:
+  60:	10 e0       	ldi	r17, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	e4 ea       	ldi	r30, 0xA4	; 164
+  68:	f7 e0       	ldi	r31, 0x07	; 7
+  6a:	02 c0       	rjmp	.+4      	; 0x70 <.do_copy_data_start>
+
+0000006c <.do_copy_data_loop>:
+  6c:	05 90       	lpm	r0, Z+
+  6e:	0d 92       	st	X+, r0
+
+00000070 <.do_copy_data_start>:
+  70:	a2 36       	cpi	r26, 0x62	; 98
+  72:	b1 07       	cpc	r27, r17
+  74:	d9 f7       	brne	.-10     	; 0x6c <.do_copy_data_loop>
+
+00000076 <__do_clear_bss>:
+  76:	10 e0       	ldi	r17, 0x00	; 0
+  78:	a2 e6       	ldi	r26, 0x62	; 98
+  7a:	b0 e0       	ldi	r27, 0x00	; 0
+  7c:	01 c0       	rjmp	.+2      	; 0x80 <.do_clear_bss_start>
+
+0000007e <.do_clear_bss_loop>:
+  7e:	1d 92       	st	X+, r1
+
+00000080 <.do_clear_bss_start>:
+  80:	aa 36       	cpi	r26, 0x6A	; 106
+  82:	b1 07       	cpc	r27, r17
+  84:	e1 f7       	brne	.-8      	; 0x7e <.do_clear_bss_loop>
+  86:	0e 94 c7 03 	call	0x78e	; 0x78e <main>
+  8a:	0c 94 d0 03 	jmp	0x7a0	; 0x7a0 <_exit>
+
+0000008e <__bad_interrupt>:
+  8e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000092 <SPI_VoidInit>:
+static void (*SPI_pvNotificationFunc)(void)= NULL;
+
+static u8 SPI_u8State= IDLE ;
+
+void SPI_VoidInit(void)
+{
+  92:	df 93       	push	r29
+  94:	cf 93       	push	r28
+  96:	cd b7       	in	r28, 0x3d	; 61
+  98:	de b7       	in	r29, 0x3e	; 62
+	#if SPI_DATA_ORDER == SPI_DATA_LSB_FIRST
+		SET_BIT(SPCR , SPCR_DORD) ;
+	#elif SPI_DATA_ORDER == SPI_DATA_MSP_FIRST
+		CLR_BIT(SPCR,SPCR_DORD);
+  9a:	ad e2       	ldi	r26, 0x2D	; 45
+  9c:	b0 e0       	ldi	r27, 0x00	; 0
+  9e:	ed e2       	ldi	r30, 0x2D	; 45
+  a0:	f0 e0       	ldi	r31, 0x00	; 0
+  a2:	80 81       	ld	r24, Z
+  a4:	8f 7d       	andi	r24, 0xDF	; 223
+  a6:	8c 93       	st	X, r24
+	#else
+		#error "wrong SPI_DATA_ORDER config"
+	#endif
+
+	#if SPI_MASTER_SLAVE_SELECT == SPI_MASTER
+		SET_BIT(SPCR , SPCR_MSTR) ;
+  a8:	ad e2       	ldi	r26, 0x2D	; 45
+  aa:	b0 e0       	ldi	r27, 0x00	; 0
+  ac:	ed e2       	ldi	r30, 0x2D	; 45
+  ae:	f0 e0       	ldi	r31, 0x00	; 0
+  b0:	80 81       	ld	r24, Z
+  b2:	80 61       	ori	r24, 0x10	; 16
+  b4:	8c 93       	st	X, r24
+	#else
+		#error "wrong SPI_MASTER_SLAVE_SELECT config"
+	#endif
+
+	#if SPI_CLOCK_POLARITY == SPI_RISING_LEADING_FALLING_TRAILING
+		CLR_BIT(SPCR , SPCR_CPOL) ;
+  b6:	ad e2       	ldi	r26, 0x2D	; 45
+  b8:	b0 e0       	ldi	r27, 0x00	; 0
+  ba:	ed e2       	ldi	r30, 0x2D	; 45
+  bc:	f0 e0       	ldi	r31, 0x00	; 0
+  be:	80 81       	ld	r24, Z
+  c0:	87 7f       	andi	r24, 0xF7	; 247
+  c2:	8c 93       	st	X, r24
+	#else
+		#error "wrong SPI_CLOCK_POLARITY config"
+	#endif
+
+	#if SPI_CLOCK_PHASE == SPI_SAMPLE_LEADING_SETUP_TRAILING
+		CLR_BIT(SPCR , SPCR_CPHA) ;
+  c4:	ad e2       	ldi	r26, 0x2D	; 45
+  c6:	b0 e0       	ldi	r27, 0x00	; 0
+  c8:	ed e2       	ldi	r30, 0x2D	; 45
+  ca:	f0 e0       	ldi	r31, 0x00	; 0
+  cc:	80 81       	ld	r24, Z
+  ce:	8b 7f       	andi	r24, 0xFB	; 251
+  d0:	8c 93       	st	X, r24
+	#elif SPI_CLOCK_RATE == SPI_FREQ_DIVIDED_BY_8
+		SET_BIT(SPCR , SPCR_SPR0) ;
+		CLR_BIT(SPCR , SPCR_SPR1) ;
+		SET_BIT(SPSR , SPSR_SPI2X) ;
+	#elif SPI_CLOCK_RATE == SPI_FREQ_DIVIDED_BY_16
+		SET_BIT(SPCR , SPCR_SPR0) ;
+  d2:	ad e2       	ldi	r26, 0x2D	; 45
+  d4:	b0 e0       	ldi	r27, 0x00	; 0
+  d6:	ed e2       	ldi	r30, 0x2D	; 45
+  d8:	f0 e0       	ldi	r31, 0x00	; 0
+  da:	80 81       	ld	r24, Z
+  dc:	81 60       	ori	r24, 0x01	; 1
+  de:	8c 93       	st	X, r24
+		CLR_BIT(SPCR , SPCR_SPR1) ;
+  e0:	ad e2       	ldi	r26, 0x2D	; 45
+  e2:	b0 e0       	ldi	r27, 0x00	; 0
+  e4:	ed e2       	ldi	r30, 0x2D	; 45
+  e6:	f0 e0       	ldi	r31, 0x00	; 0
+  e8:	80 81       	ld	r24, Z
+  ea:	8d 7f       	andi	r24, 0xFD	; 253
+  ec:	8c 93       	st	X, r24
+		CLR_BIT(SPSR , SPSR_SPI2X) ;
+  ee:	ae e2       	ldi	r26, 0x2E	; 46
+  f0:	b0 e0       	ldi	r27, 0x00	; 0
+  f2:	ee e2       	ldi	r30, 0x2E	; 46
+  f4:	f0 e0       	ldi	r31, 0x00	; 0
+  f6:	80 81       	ld	r24, Z
+  f8:	8e 7f       	andi	r24, 0xFE	; 254
+  fa:	8c 93       	st	X, r24
+	#else
+		#error "wrong SPI_CLOCK_RATE config"
+	#endif
+
+	#if SPI_INTERRUPT_ENABLE_MODE == SPI_INTERRUPT_DISABLE
+		CLR_BIT(SPCR , SPCR_SPIE) ;
+  fc:	ad e2       	ldi	r26, 0x2D	; 45
+  fe:	b0 e0       	ldi	r27, 0x00	; 0
+ 100:	ed e2       	ldi	r30, 0x2D	; 45
+ 102:	f0 e0       	ldi	r31, 0x00	; 0
+ 104:	80 81       	ld	r24, Z
+ 106:	8f 77       	andi	r24, 0x7F	; 127
+ 108:	8c 93       	st	X, r24
+	#endif
+
+	#if SPI_ENABLE_MODE == SPI_DISABLE
+		CLR_BIT(SPCR , SPCR_SPE) ;
+	#elif SPI_ENABLE_MODE == SPI_ENABLE
+		SET_BIT(SPCR , SPCR_SPE) ;
+ 10a:	ad e2       	ldi	r26, 0x2D	; 45
+ 10c:	b0 e0       	ldi	r27, 0x00	; 0
+ 10e:	ed e2       	ldi	r30, 0x2D	; 45
+ 110:	f0 e0       	ldi	r31, 0x00	; 0
+ 112:	80 81       	ld	r24, Z
+ 114:	80 64       	ori	r24, 0x40	; 64
+ 116:	8c 93       	st	X, r24
+	#else
+		#error "wrong SPI_ENABLE_MODE config"
+	#endif
+
+}
+ 118:	cf 91       	pop	r28
+ 11a:	df 91       	pop	r29
+ 11c:	08 95       	ret
+
+0000011e <SPI_u8InitConfig>:
+
+
+ES_t SPI_u8InitConfig (SPI_CONFIG *spi)
+{
+ 11e:	df 93       	push	r29
+ 120:	cf 93       	push	r28
+ 122:	cd b7       	in	r28, 0x3d	; 61
+ 124:	de b7       	in	r29, 0x3e	; 62
+ 126:	61 97       	sbiw	r28, 0x11	; 17
+ 128:	0f b6       	in	r0, 0x3f	; 63
+ 12a:	f8 94       	cli
+ 12c:	de bf       	out	0x3e, r29	; 62
+ 12e:	0f be       	out	0x3f, r0	; 63
+ 130:	cd bf       	out	0x3d, r28	; 61
+ 132:	9b 83       	std	Y+3, r25	; 0x03
+ 134:	8a 83       	std	Y+2, r24	; 0x02
+	u8 Local_u8ErrorState = ES_OK ;
+ 136:	81 e0       	ldi	r24, 0x01	; 1
+ 138:	89 83       	std	Y+1, r24	; 0x01
+
+	if ((spi != NULL) && (spi->SPI_u8ClockPhase != NULL) && (spi->SPI_u8ClockPolarity != NULL) && (spi->SPI_u8ClockRate != NULL) && (spi->SPI_u8DataOrder != NULL) && (spi->SPI_u8InterruptEnable != NULL) && (spi->SPI_u8MasterSlaveSelect != NULL) && (spi->SPI_u8SPIEnable != NULL))
+ 13a:	8a 81       	ldd	r24, Y+2	; 0x02
+ 13c:	9b 81       	ldd	r25, Y+3	; 0x03
+ 13e:	00 97       	sbiw	r24, 0x00	; 0
+ 140:	09 f4       	brne	.+2      	; 0x144 <SPI_u8InitConfig+0x26>
+ 142:	d4 c1       	rjmp	.+936    	; 0x4ec <SPI_u8InitConfig+0x3ce>
+ 144:	ea 81       	ldd	r30, Y+2	; 0x02
+ 146:	fb 81       	ldd	r31, Y+3	; 0x03
+ 148:	85 81       	ldd	r24, Z+5	; 0x05
+ 14a:	88 2f       	mov	r24, r24
+ 14c:	90 e0       	ldi	r25, 0x00	; 0
+ 14e:	00 97       	sbiw	r24, 0x00	; 0
+ 150:	09 f4       	brne	.+2      	; 0x154 <SPI_u8InitConfig+0x36>
+ 152:	cc c1       	rjmp	.+920    	; 0x4ec <SPI_u8InitConfig+0x3ce>
+ 154:	ea 81       	ldd	r30, Y+2	; 0x02
+ 156:	fb 81       	ldd	r31, Y+3	; 0x03
+ 158:	84 81       	ldd	r24, Z+4	; 0x04
+ 15a:	88 2f       	mov	r24, r24
+ 15c:	90 e0       	ldi	r25, 0x00	; 0
+ 15e:	00 97       	sbiw	r24, 0x00	; 0
+ 160:	09 f4       	brne	.+2      	; 0x164 <SPI_u8InitConfig+0x46>
+ 162:	c4 c1       	rjmp	.+904    	; 0x4ec <SPI_u8InitConfig+0x3ce>
+ 164:	ea 81       	ldd	r30, Y+2	; 0x02
+ 166:	fb 81       	ldd	r31, Y+3	; 0x03
+ 168:	86 81       	ldd	r24, Z+6	; 0x06
+ 16a:	88 2f       	mov	r24, r24
+ 16c:	90 e0       	ldi	r25, 0x00	; 0
+ 16e:	00 97       	sbiw	r24, 0x00	; 0
+ 170:	09 f4       	brne	.+2      	; 0x174 <SPI_u8InitConfig+0x56>
+ 172:	bc c1       	rjmp	.+888    	; 0x4ec <SPI_u8InitConfig+0x3ce>
+ 174:	ea 81       	ldd	r30, Y+2	; 0x02
+ 176:	fb 81       	ldd	r31, Y+3	; 0x03
+ 178:	82 81       	ldd	r24, Z+2	; 0x02
+ 17a:	88 2f       	mov	r24, r24
+ 17c:	90 e0       	ldi	r25, 0x00	; 0
+ 17e:	00 97       	sbiw	r24, 0x00	; 0
+ 180:	09 f4       	brne	.+2      	; 0x184 <SPI_u8InitConfig+0x66>
+ 182:	b4 c1       	rjmp	.+872    	; 0x4ec <SPI_u8InitConfig+0x3ce>
+ 184:	ea 81       	ldd	r30, Y+2	; 0x02
+ 186:	fb 81       	ldd	r31, Y+3	; 0x03
+ 188:	80 81       	ld	r24, Z
+ 18a:	88 2f       	mov	r24, r24
+ 18c:	90 e0       	ldi	r25, 0x00	; 0
+ 18e:	00 97       	sbiw	r24, 0x00	; 0
+ 190:	09 f4       	brne	.+2      	; 0x194 <SPI_u8InitConfig+0x76>
+ 192:	ac c1       	rjmp	.+856    	; 0x4ec <SPI_u8InitConfig+0x3ce>
+ 194:	ea 81       	ldd	r30, Y+2	; 0x02
+ 196:	fb 81       	ldd	r31, Y+3	; 0x03
+ 198:	83 81       	ldd	r24, Z+3	; 0x03
+ 19a:	88 2f       	mov	r24, r24
+ 19c:	90 e0       	ldi	r25, 0x00	; 0
+ 19e:	00 97       	sbiw	r24, 0x00	; 0
+ 1a0:	09 f4       	brne	.+2      	; 0x1a4 <SPI_u8InitConfig+0x86>
+ 1a2:	a4 c1       	rjmp	.+840    	; 0x4ec <SPI_u8InitConfig+0x3ce>
+ 1a4:	ea 81       	ldd	r30, Y+2	; 0x02
+ 1a6:	fb 81       	ldd	r31, Y+3	; 0x03
+ 1a8:	81 81       	ldd	r24, Z+1	; 0x01
+ 1aa:	88 2f       	mov	r24, r24
+ 1ac:	90 e0       	ldi	r25, 0x00	; 0
+ 1ae:	00 97       	sbiw	r24, 0x00	; 0
+ 1b0:	09 f4       	brne	.+2      	; 0x1b4 <SPI_u8InitConfig+0x96>
+ 1b2:	9c c1       	rjmp	.+824    	; 0x4ec <SPI_u8InitConfig+0x3ce>
+	{
+		switch (spi->SPI_u8ClockPhase)
+ 1b4:	ea 81       	ldd	r30, Y+2	; 0x02
+ 1b6:	fb 81       	ldd	r31, Y+3	; 0x03
+ 1b8:	85 81       	ldd	r24, Z+5	; 0x05
+ 1ba:	28 2f       	mov	r18, r24
+ 1bc:	30 e0       	ldi	r19, 0x00	; 0
+ 1be:	39 8b       	std	Y+17, r19	; 0x11
+ 1c0:	28 8b       	std	Y+16, r18	; 0x10
+ 1c2:	88 89       	ldd	r24, Y+16	; 0x10
+ 1c4:	99 89       	ldd	r25, Y+17	; 0x11
+ 1c6:	00 97       	sbiw	r24, 0x00	; 0
+ 1c8:	31 f0       	breq	.+12     	; 0x1d6 <SPI_u8InitConfig+0xb8>
+ 1ca:	28 89       	ldd	r18, Y+16	; 0x10
+ 1cc:	39 89       	ldd	r19, Y+17	; 0x11
+ 1ce:	21 30       	cpi	r18, 0x01	; 1
+ 1d0:	31 05       	cpc	r19, r1
+ 1d2:	49 f0       	breq	.+18     	; 0x1e6 <SPI_u8InitConfig+0xc8>
+ 1d4:	10 c0       	rjmp	.+32     	; 0x1f6 <SPI_u8InitConfig+0xd8>
+		{
+		case SPI_SAMPLE_LEADING_SETUP_TRAILING: CLR_BIT(SPCR , SPCR_CPHA) ; break ;
+ 1d6:	ad e2       	ldi	r26, 0x2D	; 45
+ 1d8:	b0 e0       	ldi	r27, 0x00	; 0
+ 1da:	ed e2       	ldi	r30, 0x2D	; 45
+ 1dc:	f0 e0       	ldi	r31, 0x00	; 0
+ 1de:	80 81       	ld	r24, Z
+ 1e0:	8b 7f       	andi	r24, 0xFB	; 251
+ 1e2:	8c 93       	st	X, r24
+ 1e4:	09 c0       	rjmp	.+18     	; 0x1f8 <SPI_u8InitConfig+0xda>
+		case SPI_SETUP_LEADING_SAMPLE_TRAILING: SET_BIT(SPCR , SPCR_CPHA) ; break ;
+ 1e6:	ad e2       	ldi	r26, 0x2D	; 45
+ 1e8:	b0 e0       	ldi	r27, 0x00	; 0
+ 1ea:	ed e2       	ldi	r30, 0x2D	; 45
+ 1ec:	f0 e0       	ldi	r31, 0x00	; 0
+ 1ee:	80 81       	ld	r24, Z
+ 1f0:	84 60       	ori	r24, 0x04	; 4
+ 1f2:	8c 93       	st	X, r24
+ 1f4:	01 c0       	rjmp	.+2      	; 0x1f8 <SPI_u8InitConfig+0xda>
+		default: 								Local_u8ErrorState = ES_NOK ; break ;
+ 1f6:	19 82       	std	Y+1, r1	; 0x01
+		}
+		switch (spi->SPI_u8ClockPolarity)
+ 1f8:	ea 81       	ldd	r30, Y+2	; 0x02
+ 1fa:	fb 81       	ldd	r31, Y+3	; 0x03
+ 1fc:	84 81       	ldd	r24, Z+4	; 0x04
+ 1fe:	28 2f       	mov	r18, r24
+ 200:	30 e0       	ldi	r19, 0x00	; 0
+ 202:	3f 87       	std	Y+15, r19	; 0x0f
+ 204:	2e 87       	std	Y+14, r18	; 0x0e
+ 206:	8e 85       	ldd	r24, Y+14	; 0x0e
+ 208:	9f 85       	ldd	r25, Y+15	; 0x0f
+ 20a:	00 97       	sbiw	r24, 0x00	; 0
+ 20c:	31 f0       	breq	.+12     	; 0x21a <SPI_u8InitConfig+0xfc>
+ 20e:	2e 85       	ldd	r18, Y+14	; 0x0e
+ 210:	3f 85       	ldd	r19, Y+15	; 0x0f
+ 212:	21 30       	cpi	r18, 0x01	; 1
+ 214:	31 05       	cpc	r19, r1
+ 216:	49 f0       	breq	.+18     	; 0x22a <SPI_u8InitConfig+0x10c>
+ 218:	10 c0       	rjmp	.+32     	; 0x23a <SPI_u8InitConfig+0x11c>
+		{
+		case SPI_RISING_LEADING_FALLING_TRAILING: CLR_BIT(SPCR , SPCR_CPOL) ; break ;
+ 21a:	ad e2       	ldi	r26, 0x2D	; 45
+ 21c:	b0 e0       	ldi	r27, 0x00	; 0
+ 21e:	ed e2       	ldi	r30, 0x2D	; 45
+ 220:	f0 e0       	ldi	r31, 0x00	; 0
+ 222:	80 81       	ld	r24, Z
+ 224:	87 7f       	andi	r24, 0xF7	; 247
+ 226:	8c 93       	st	X, r24
+ 228:	09 c0       	rjmp	.+18     	; 0x23c <SPI_u8InitConfig+0x11e>
+		case SPI_FALLING_LEADING_RISING_TRAILING: SET_BIT(SPCR , SPCR_CPOL) ; break ;
+ 22a:	ad e2       	ldi	r26, 0x2D	; 45
+ 22c:	b0 e0       	ldi	r27, 0x00	; 0
+ 22e:	ed e2       	ldi	r30, 0x2D	; 45
+ 230:	f0 e0       	ldi	r31, 0x00	; 0
+ 232:	80 81       	ld	r24, Z
+ 234:	88 60       	ori	r24, 0x08	; 8
+ 236:	8c 93       	st	X, r24
+ 238:	01 c0       	rjmp	.+2      	; 0x23c <SPI_u8InitConfig+0x11e>
+		default:								  Local_u8ErrorState = ES_NOK ; break ;
+ 23a:	19 82       	std	Y+1, r1	; 0x01
+		}
+		switch (spi->SPI_u8ClockRate)
+ 23c:	ea 81       	ldd	r30, Y+2	; 0x02
+ 23e:	fb 81       	ldd	r31, Y+3	; 0x03
+ 240:	86 81       	ldd	r24, Z+6	; 0x06
+ 242:	28 2f       	mov	r18, r24
+ 244:	30 e0       	ldi	r19, 0x00	; 0
+ 246:	3d 87       	std	Y+13, r19	; 0x0d
+ 248:	2c 87       	std	Y+12, r18	; 0x0c
+ 24a:	8c 85       	ldd	r24, Y+12	; 0x0c
+ 24c:	9d 85       	ldd	r25, Y+13	; 0x0d
+ 24e:	83 30       	cpi	r24, 0x03	; 3
+ 250:	91 05       	cpc	r25, r1
+ 252:	09 f4       	brne	.+2      	; 0x256 <SPI_u8InitConfig+0x138>
+ 254:	6a c0       	rjmp	.+212    	; 0x32a <SPI_u8InitConfig+0x20c>
+ 256:	2c 85       	ldd	r18, Y+12	; 0x0c
+ 258:	3d 85       	ldd	r19, Y+13	; 0x0d
+ 25a:	24 30       	cpi	r18, 0x04	; 4
+ 25c:	31 05       	cpc	r19, r1
+ 25e:	84 f4       	brge	.+32     	; 0x280 <SPI_u8InitConfig+0x162>
+ 260:	8c 85       	ldd	r24, Y+12	; 0x0c
+ 262:	9d 85       	ldd	r25, Y+13	; 0x0d
+ 264:	81 30       	cpi	r24, 0x01	; 1
+ 266:	91 05       	cpc	r25, r1
+ 268:	a1 f1       	breq	.+104    	; 0x2d2 <SPI_u8InitConfig+0x1b4>
+ 26a:	2c 85       	ldd	r18, Y+12	; 0x0c
+ 26c:	3d 85       	ldd	r19, Y+13	; 0x0d
+ 26e:	22 30       	cpi	r18, 0x02	; 2
+ 270:	31 05       	cpc	r19, r1
+ 272:	0c f0       	brlt	.+2      	; 0x276 <SPI_u8InitConfig+0x158>
+ 274:	44 c0       	rjmp	.+136    	; 0x2fe <SPI_u8InitConfig+0x1e0>
+ 276:	8c 85       	ldd	r24, Y+12	; 0x0c
+ 278:	9d 85       	ldd	r25, Y+13	; 0x0d
+ 27a:	00 97       	sbiw	r24, 0x00	; 0
+ 27c:	a1 f0       	breq	.+40     	; 0x2a6 <SPI_u8InitConfig+0x188>
+ 27e:	ad c0       	rjmp	.+346    	; 0x3da <SPI_u8InitConfig+0x2bc>
+ 280:	2c 85       	ldd	r18, Y+12	; 0x0c
+ 282:	3d 85       	ldd	r19, Y+13	; 0x0d
+ 284:	25 30       	cpi	r18, 0x05	; 5
+ 286:	31 05       	cpc	r19, r1
+ 288:	09 f4       	brne	.+2      	; 0x28c <SPI_u8InitConfig+0x16e>
+ 28a:	7b c0       	rjmp	.+246    	; 0x382 <SPI_u8InitConfig+0x264>
+ 28c:	8c 85       	ldd	r24, Y+12	; 0x0c
+ 28e:	9d 85       	ldd	r25, Y+13	; 0x0d
+ 290:	85 30       	cpi	r24, 0x05	; 5
+ 292:	91 05       	cpc	r25, r1
+ 294:	0c f4       	brge	.+2      	; 0x298 <SPI_u8InitConfig+0x17a>
+ 296:	5f c0       	rjmp	.+190    	; 0x356 <SPI_u8InitConfig+0x238>
+ 298:	2c 85       	ldd	r18, Y+12	; 0x0c
+ 29a:	3d 85       	ldd	r19, Y+13	; 0x0d
+ 29c:	26 30       	cpi	r18, 0x06	; 6
+ 29e:	31 05       	cpc	r19, r1
+ 2a0:	09 f4       	brne	.+2      	; 0x2a4 <SPI_u8InitConfig+0x186>
+ 2a2:	85 c0       	rjmp	.+266    	; 0x3ae <SPI_u8InitConfig+0x290>
+ 2a4:	9a c0       	rjmp	.+308    	; 0x3da <SPI_u8InitConfig+0x2bc>
+		{
+		case SPI_FREQ_DIVIDED_BY_2:
+			CLR_BIT(SPCR , SPCR_SPR0) ;
+ 2a6:	ad e2       	ldi	r26, 0x2D	; 45
+ 2a8:	b0 e0       	ldi	r27, 0x00	; 0
+ 2aa:	ed e2       	ldi	r30, 0x2D	; 45
+ 2ac:	f0 e0       	ldi	r31, 0x00	; 0
+ 2ae:	80 81       	ld	r24, Z
+ 2b0:	8e 7f       	andi	r24, 0xFE	; 254
+ 2b2:	8c 93       	st	X, r24
+			CLR_BIT(SPCR , SPCR_SPR1) ;
+ 2b4:	ad e2       	ldi	r26, 0x2D	; 45
+ 2b6:	b0 e0       	ldi	r27, 0x00	; 0
+ 2b8:	ed e2       	ldi	r30, 0x2D	; 45
+ 2ba:	f0 e0       	ldi	r31, 0x00	; 0
+ 2bc:	80 81       	ld	r24, Z
+ 2be:	8d 7f       	andi	r24, 0xFD	; 253
+ 2c0:	8c 93       	st	X, r24
+			SET_BIT(SPSR , SPSR_SPI2X) ;
+ 2c2:	ae e2       	ldi	r26, 0x2E	; 46
+ 2c4:	b0 e0       	ldi	r27, 0x00	; 0
+ 2c6:	ee e2       	ldi	r30, 0x2E	; 46
+ 2c8:	f0 e0       	ldi	r31, 0x00	; 0
+ 2ca:	80 81       	ld	r24, Z
+ 2cc:	81 60       	ori	r24, 0x01	; 1
+ 2ce:	8c 93       	st	X, r24
+ 2d0:	85 c0       	rjmp	.+266    	; 0x3dc <SPI_u8InitConfig+0x2be>
+			break ;
+		case SPI_FREQ_DIVIDED_BY_4:
+			CLR_BIT(SPCR , SPCR_SPR0) ;
+ 2d2:	ad e2       	ldi	r26, 0x2D	; 45
+ 2d4:	b0 e0       	ldi	r27, 0x00	; 0
+ 2d6:	ed e2       	ldi	r30, 0x2D	; 45
+ 2d8:	f0 e0       	ldi	r31, 0x00	; 0
+ 2da:	80 81       	ld	r24, Z
+ 2dc:	8e 7f       	andi	r24, 0xFE	; 254
+ 2de:	8c 93       	st	X, r24
+			CLR_BIT(SPCR , SPCR_SPR1) ;
+ 2e0:	ad e2       	ldi	r26, 0x2D	; 45
+ 2e2:	b0 e0       	ldi	r27, 0x00	; 0
+ 2e4:	ed e2       	ldi	r30, 0x2D	; 45
+ 2e6:	f0 e0       	ldi	r31, 0x00	; 0
+ 2e8:	80 81       	ld	r24, Z
+ 2ea:	8d 7f       	andi	r24, 0xFD	; 253
+ 2ec:	8c 93       	st	X, r24
+			CLR_BIT(SPSR , SPSR_SPI2X) ;
+ 2ee:	ae e2       	ldi	r26, 0x2E	; 46
+ 2f0:	b0 e0       	ldi	r27, 0x00	; 0
+ 2f2:	ee e2       	ldi	r30, 0x2E	; 46
+ 2f4:	f0 e0       	ldi	r31, 0x00	; 0
+ 2f6:	80 81       	ld	r24, Z
+ 2f8:	8e 7f       	andi	r24, 0xFE	; 254
+ 2fa:	8c 93       	st	X, r24
+ 2fc:	6f c0       	rjmp	.+222    	; 0x3dc <SPI_u8InitConfig+0x2be>
+			break ;
+		case SPI_FREQ_DIVIDED_BY_8:
+			SET_BIT(SPCR , SPCR_SPR0) ;
+ 2fe:	ad e2       	ldi	r26, 0x2D	; 45
+ 300:	b0 e0       	ldi	r27, 0x00	; 0
+ 302:	ed e2       	ldi	r30, 0x2D	; 45
+ 304:	f0 e0       	ldi	r31, 0x00	; 0
+ 306:	80 81       	ld	r24, Z
+ 308:	81 60       	ori	r24, 0x01	; 1
+ 30a:	8c 93       	st	X, r24
+			CLR_BIT(SPCR , SPCR_SPR1) ;
+ 30c:	ad e2       	ldi	r26, 0x2D	; 45
+ 30e:	b0 e0       	ldi	r27, 0x00	; 0
+ 310:	ed e2       	ldi	r30, 0x2D	; 45
+ 312:	f0 e0       	ldi	r31, 0x00	; 0
+ 314:	80 81       	ld	r24, Z
+ 316:	8d 7f       	andi	r24, 0xFD	; 253
+ 318:	8c 93       	st	X, r24
+			SET_BIT(SPSR , SPSR_SPI2X) ;
+ 31a:	ae e2       	ldi	r26, 0x2E	; 46
+ 31c:	b0 e0       	ldi	r27, 0x00	; 0
+ 31e:	ee e2       	ldi	r30, 0x2E	; 46
+ 320:	f0 e0       	ldi	r31, 0x00	; 0
+ 322:	80 81       	ld	r24, Z
+ 324:	81 60       	ori	r24, 0x01	; 1
+ 326:	8c 93       	st	X, r24
+ 328:	59 c0       	rjmp	.+178    	; 0x3dc <SPI_u8InitConfig+0x2be>
+			break ;
+		case SPI_FREQ_DIVIDED_BY_16:
+			SET_BIT(SPCR , SPCR_SPR0) ;
+ 32a:	ad e2       	ldi	r26, 0x2D	; 45
+ 32c:	b0 e0       	ldi	r27, 0x00	; 0
+ 32e:	ed e2       	ldi	r30, 0x2D	; 45
+ 330:	f0 e0       	ldi	r31, 0x00	; 0
+ 332:	80 81       	ld	r24, Z
+ 334:	81 60       	ori	r24, 0x01	; 1
+ 336:	8c 93       	st	X, r24
+			CLR_BIT(SPCR , SPCR_SPR1) ;
+ 338:	ad e2       	ldi	r26, 0x2D	; 45
+ 33a:	b0 e0       	ldi	r27, 0x00	; 0
+ 33c:	ed e2       	ldi	r30, 0x2D	; 45
+ 33e:	f0 e0       	ldi	r31, 0x00	; 0
+ 340:	80 81       	ld	r24, Z
+ 342:	8d 7f       	andi	r24, 0xFD	; 253
+ 344:	8c 93       	st	X, r24
+			CLR_BIT(SPSR , SPSR_SPI2X) ;
+ 346:	ae e2       	ldi	r26, 0x2E	; 46
+ 348:	b0 e0       	ldi	r27, 0x00	; 0
+ 34a:	ee e2       	ldi	r30, 0x2E	; 46
+ 34c:	f0 e0       	ldi	r31, 0x00	; 0
+ 34e:	80 81       	ld	r24, Z
+ 350:	8e 7f       	andi	r24, 0xFE	; 254
+ 352:	8c 93       	st	X, r24
+ 354:	43 c0       	rjmp	.+134    	; 0x3dc <SPI_u8InitConfig+0x2be>
+			break ;
+		case SPI_FREQ_DIVIDED_BY_32:
+			CLR_BIT(SPCR , SPCR_SPR0) ;
+ 356:	ad e2       	ldi	r26, 0x2D	; 45
+ 358:	b0 e0       	ldi	r27, 0x00	; 0
+ 35a:	ed e2       	ldi	r30, 0x2D	; 45
+ 35c:	f0 e0       	ldi	r31, 0x00	; 0
+ 35e:	80 81       	ld	r24, Z
+ 360:	8e 7f       	andi	r24, 0xFE	; 254
+ 362:	8c 93       	st	X, r24
+			SET_BIT(SPCR , SPCR_SPR1) ;
+ 364:	ad e2       	ldi	r26, 0x2D	; 45
+ 366:	b0 e0       	ldi	r27, 0x00	; 0
+ 368:	ed e2       	ldi	r30, 0x2D	; 45
+ 36a:	f0 e0       	ldi	r31, 0x00	; 0
+ 36c:	80 81       	ld	r24, Z
+ 36e:	82 60       	ori	r24, 0x02	; 2
+ 370:	8c 93       	st	X, r24
+			SET_BIT(SPSR , SPSR_SPI2X) ;
+ 372:	ae e2       	ldi	r26, 0x2E	; 46
+ 374:	b0 e0       	ldi	r27, 0x00	; 0
+ 376:	ee e2       	ldi	r30, 0x2E	; 46
+ 378:	f0 e0       	ldi	r31, 0x00	; 0
+ 37a:	80 81       	ld	r24, Z
+ 37c:	81 60       	ori	r24, 0x01	; 1
+ 37e:	8c 93       	st	X, r24
+ 380:	2d c0       	rjmp	.+90     	; 0x3dc <SPI_u8InitConfig+0x2be>
+			break ;
+		case SPI_FREQ_DIVIDED_BY_64:
+			CLR_BIT(SPCR , SPCR_SPR0) ;
+ 382:	ad e2       	ldi	r26, 0x2D	; 45
+ 384:	b0 e0       	ldi	r27, 0x00	; 0
+ 386:	ed e2       	ldi	r30, 0x2D	; 45
+ 388:	f0 e0       	ldi	r31, 0x00	; 0
+ 38a:	80 81       	ld	r24, Z
+ 38c:	8e 7f       	andi	r24, 0xFE	; 254
+ 38e:	8c 93       	st	X, r24
+			SET_BIT(SPCR , SPCR_SPR1) ;
+ 390:	ad e2       	ldi	r26, 0x2D	; 45
+ 392:	b0 e0       	ldi	r27, 0x00	; 0
+ 394:	ed e2       	ldi	r30, 0x2D	; 45
+ 396:	f0 e0       	ldi	r31, 0x00	; 0
+ 398:	80 81       	ld	r24, Z
+ 39a:	82 60       	ori	r24, 0x02	; 2
+ 39c:	8c 93       	st	X, r24
+			CLR_BIT(SPSR , SPSR_SPI2X) ;
+ 39e:	ae e2       	ldi	r26, 0x2E	; 46
+ 3a0:	b0 e0       	ldi	r27, 0x00	; 0
+ 3a2:	ee e2       	ldi	r30, 0x2E	; 46
+ 3a4:	f0 e0       	ldi	r31, 0x00	; 0
+ 3a6:	80 81       	ld	r24, Z
+ 3a8:	8e 7f       	andi	r24, 0xFE	; 254
+ 3aa:	8c 93       	st	X, r24
+ 3ac:	17 c0       	rjmp	.+46     	; 0x3dc <SPI_u8InitConfig+0x2be>
+			break ;
+		case SPI_FREQ_DIVIDED_BY_128:
+			SET_BIT(SPCR , SPCR_SPR0) ;
+ 3ae:	ad e2       	ldi	r26, 0x2D	; 45
+ 3b0:	b0 e0       	ldi	r27, 0x00	; 0
+ 3b2:	ed e2       	ldi	r30, 0x2D	; 45
+ 3b4:	f0 e0       	ldi	r31, 0x00	; 0
+ 3b6:	80 81       	ld	r24, Z
+ 3b8:	81 60       	ori	r24, 0x01	; 1
+ 3ba:	8c 93       	st	X, r24
+			SET_BIT(SPCR , SPCR_SPR1) ;
+ 3bc:	ad e2       	ldi	r26, 0x2D	; 45
+ 3be:	b0 e0       	ldi	r27, 0x00	; 0
+ 3c0:	ed e2       	ldi	r30, 0x2D	; 45
+ 3c2:	f0 e0       	ldi	r31, 0x00	; 0
+ 3c4:	80 81       	ld	r24, Z
+ 3c6:	82 60       	ori	r24, 0x02	; 2
+ 3c8:	8c 93       	st	X, r24
+			CLR_BIT(SPSR , SPSR_SPI2X) ;
+ 3ca:	ae e2       	ldi	r26, 0x2E	; 46
+ 3cc:	b0 e0       	ldi	r27, 0x00	; 0
+ 3ce:	ee e2       	ldi	r30, 0x2E	; 46
+ 3d0:	f0 e0       	ldi	r31, 0x00	; 0
+ 3d2:	80 81       	ld	r24, Z
+ 3d4:	8e 7f       	andi	r24, 0xFE	; 254
+ 3d6:	8c 93       	st	X, r24
+ 3d8:	01 c0       	rjmp	.+2      	; 0x3dc <SPI_u8InitConfig+0x2be>
+			break ;
+		default:
+			Local_u8ErrorState = ES_NOK ;
+ 3da:	19 82       	std	Y+1, r1	; 0x01
+			break ;
+		}
+		switch (spi->SPI_u8DataOrder)
+ 3dc:	ea 81       	ldd	r30, Y+2	; 0x02
+ 3de:	fb 81       	ldd	r31, Y+3	; 0x03
+ 3e0:	82 81       	ldd	r24, Z+2	; 0x02
+ 3e2:	28 2f       	mov	r18, r24
+ 3e4:	30 e0       	ldi	r19, 0x00	; 0
+ 3e6:	3b 87       	std	Y+11, r19	; 0x0b
+ 3e8:	2a 87       	std	Y+10, r18	; 0x0a
+ 3ea:	8a 85       	ldd	r24, Y+10	; 0x0a
+ 3ec:	9b 85       	ldd	r25, Y+11	; 0x0b
+ 3ee:	00 97       	sbiw	r24, 0x00	; 0
+ 3f0:	69 f0       	breq	.+26     	; 0x40c <SPI_u8InitConfig+0x2ee>
+ 3f2:	2a 85       	ldd	r18, Y+10	; 0x0a
+ 3f4:	3b 85       	ldd	r19, Y+11	; 0x0b
+ 3f6:	21 30       	cpi	r18, 0x01	; 1
+ 3f8:	31 05       	cpc	r19, r1
+ 3fa:	81 f4       	brne	.+32     	; 0x41c <SPI_u8InitConfig+0x2fe>
+		{
+		case SPI_DATA_MSP_FIRST: CLR_BIT(SPCR , SPCR_DORD) ; break ;
+ 3fc:	ad e2       	ldi	r26, 0x2D	; 45
+ 3fe:	b0 e0       	ldi	r27, 0x00	; 0
+ 400:	ed e2       	ldi	r30, 0x2D	; 45
+ 402:	f0 e0       	ldi	r31, 0x00	; 0
+ 404:	80 81       	ld	r24, Z
+ 406:	8f 7d       	andi	r24, 0xDF	; 223
+ 408:	8c 93       	st	X, r24
+ 40a:	09 c0       	rjmp	.+18     	; 0x41e <SPI_u8InitConfig+0x300>
+		case SPI_DATA_LSB_FIRST: SET_BIT(SPCR , SPCR_DORD) ; break ;
+ 40c:	ad e2       	ldi	r26, 0x2D	; 45
+ 40e:	b0 e0       	ldi	r27, 0x00	; 0
+ 410:	ed e2       	ldi	r30, 0x2D	; 45
+ 412:	f0 e0       	ldi	r31, 0x00	; 0
+ 414:	80 81       	ld	r24, Z
+ 416:	80 62       	ori	r24, 0x20	; 32
+ 418:	8c 93       	st	X, r24
+ 41a:	01 c0       	rjmp	.+2      	; 0x41e <SPI_u8InitConfig+0x300>
+		default:				 Local_u8ErrorState = ES_NOK ; break ;
+ 41c:	19 82       	std	Y+1, r1	; 0x01
+		}
+		switch (spi->SPI_u8MasterSlaveSelect)
+ 41e:	ea 81       	ldd	r30, Y+2	; 0x02
+ 420:	fb 81       	ldd	r31, Y+3	; 0x03
+ 422:	83 81       	ldd	r24, Z+3	; 0x03
+ 424:	28 2f       	mov	r18, r24
+ 426:	30 e0       	ldi	r19, 0x00	; 0
+ 428:	39 87       	std	Y+9, r19	; 0x09
+ 42a:	28 87       	std	Y+8, r18	; 0x08
+ 42c:	88 85       	ldd	r24, Y+8	; 0x08
+ 42e:	99 85       	ldd	r25, Y+9	; 0x09
+ 430:	00 97       	sbiw	r24, 0x00	; 0
+ 432:	31 f0       	breq	.+12     	; 0x440 <SPI_u8InitConfig+0x322>
+ 434:	28 85       	ldd	r18, Y+8	; 0x08
+ 436:	39 85       	ldd	r19, Y+9	; 0x09
+ 438:	21 30       	cpi	r18, 0x01	; 1
+ 43a:	31 05       	cpc	r19, r1
+ 43c:	49 f0       	breq	.+18     	; 0x450 <SPI_u8InitConfig+0x332>
+ 43e:	10 c0       	rjmp	.+32     	; 0x460 <SPI_u8InitConfig+0x342>
+		{
+		case SPI_MASTER: SET_BIT(SPCR , SPCR_MSTR) ; break ;
+ 440:	ad e2       	ldi	r26, 0x2D	; 45
+ 442:	b0 e0       	ldi	r27, 0x00	; 0
+ 444:	ed e2       	ldi	r30, 0x2D	; 45
+ 446:	f0 e0       	ldi	r31, 0x00	; 0
+ 448:	80 81       	ld	r24, Z
+ 44a:	80 61       	ori	r24, 0x10	; 16
+ 44c:	8c 93       	st	X, r24
+ 44e:	09 c0       	rjmp	.+18     	; 0x462 <SPI_u8InitConfig+0x344>
+		case SPI_SLAVE:  CLR_BIT(SPCR , SPCR_MSTR) ; break ;
+ 450:	ad e2       	ldi	r26, 0x2D	; 45
+ 452:	b0 e0       	ldi	r27, 0x00	; 0
+ 454:	ed e2       	ldi	r30, 0x2D	; 45
+ 456:	f0 e0       	ldi	r31, 0x00	; 0
+ 458:	80 81       	ld	r24, Z
+ 45a:	8f 7e       	andi	r24, 0xEF	; 239
+ 45c:	8c 93       	st	X, r24
+ 45e:	01 c0       	rjmp	.+2      	; 0x462 <SPI_u8InitConfig+0x344>
+		default:		 Local_u8ErrorState = ES_NOK ; break ;
+ 460:	19 82       	std	Y+1, r1	; 0x01
+		}
+		switch (spi->SPI_u8InterruptEnable)
+ 462:	ea 81       	ldd	r30, Y+2	; 0x02
+ 464:	fb 81       	ldd	r31, Y+3	; 0x03
+ 466:	80 81       	ld	r24, Z
+ 468:	28 2f       	mov	r18, r24
+ 46a:	30 e0       	ldi	r19, 0x00	; 0
+ 46c:	3f 83       	std	Y+7, r19	; 0x07
+ 46e:	2e 83       	std	Y+6, r18	; 0x06
+ 470:	8e 81       	ldd	r24, Y+6	; 0x06
+ 472:	9f 81       	ldd	r25, Y+7	; 0x07
+ 474:	00 97       	sbiw	r24, 0x00	; 0
+ 476:	31 f0       	breq	.+12     	; 0x484 <SPI_u8InitConfig+0x366>
+ 478:	2e 81       	ldd	r18, Y+6	; 0x06
+ 47a:	3f 81       	ldd	r19, Y+7	; 0x07
+ 47c:	21 30       	cpi	r18, 0x01	; 1
+ 47e:	31 05       	cpc	r19, r1
+ 480:	49 f0       	breq	.+18     	; 0x494 <SPI_u8InitConfig+0x376>
+ 482:	10 c0       	rjmp	.+32     	; 0x4a4 <SPI_u8InitConfig+0x386>
+		{
+		case SPI_INTERRUPT_DISABLE: CLR_BIT(SPCR , SPCR_SPIE) ; break ;
+ 484:	ad e2       	ldi	r26, 0x2D	; 45
+ 486:	b0 e0       	ldi	r27, 0x00	; 0
+ 488:	ed e2       	ldi	r30, 0x2D	; 45
+ 48a:	f0 e0       	ldi	r31, 0x00	; 0
+ 48c:	80 81       	ld	r24, Z
+ 48e:	8f 77       	andi	r24, 0x7F	; 127
+ 490:	8c 93       	st	X, r24
+ 492:	09 c0       	rjmp	.+18     	; 0x4a6 <SPI_u8InitConfig+0x388>
+		case SPI_INTERRUPT_ENABLE:  SET_BIT(SPCR , SPCR_SPIE) ; break ;
+ 494:	ad e2       	ldi	r26, 0x2D	; 45
+ 496:	b0 e0       	ldi	r27, 0x00	; 0
+ 498:	ed e2       	ldi	r30, 0x2D	; 45
+ 49a:	f0 e0       	ldi	r31, 0x00	; 0
+ 49c:	80 81       	ld	r24, Z
+ 49e:	80 68       	ori	r24, 0x80	; 128
+ 4a0:	8c 93       	st	X, r24
+ 4a2:	01 c0       	rjmp	.+2      	; 0x4a6 <SPI_u8InitConfig+0x388>
+		default:		 			Local_u8ErrorState = ES_NOK ; break ;
+ 4a4:	19 82       	std	Y+1, r1	; 0x01
+		}
+		switch (spi->SPI_u8SPIEnable)
+ 4a6:	ea 81       	ldd	r30, Y+2	; 0x02
+ 4a8:	fb 81       	ldd	r31, Y+3	; 0x03
+ 4aa:	81 81       	ldd	r24, Z+1	; 0x01
+ 4ac:	28 2f       	mov	r18, r24
+ 4ae:	30 e0       	ldi	r19, 0x00	; 0
+ 4b0:	3d 83       	std	Y+5, r19	; 0x05
+ 4b2:	2c 83       	std	Y+4, r18	; 0x04
+ 4b4:	8c 81       	ldd	r24, Y+4	; 0x04
+ 4b6:	9d 81       	ldd	r25, Y+5	; 0x05
+ 4b8:	00 97       	sbiw	r24, 0x00	; 0
+ 4ba:	31 f0       	breq	.+12     	; 0x4c8 <SPI_u8InitConfig+0x3aa>
+ 4bc:	2c 81       	ldd	r18, Y+4	; 0x04
+ 4be:	3d 81       	ldd	r19, Y+5	; 0x05
+ 4c0:	21 30       	cpi	r18, 0x01	; 1
+ 4c2:	31 05       	cpc	r19, r1
+ 4c4:	49 f0       	breq	.+18     	; 0x4d8 <SPI_u8InitConfig+0x3ba>
+ 4c6:	10 c0       	rjmp	.+32     	; 0x4e8 <SPI_u8InitConfig+0x3ca>
+		{
+		case SPI_DISABLE: CLR_BIT(SPCR , SPCR_SPE) ; break ;
+ 4c8:	ad e2       	ldi	r26, 0x2D	; 45
+ 4ca:	b0 e0       	ldi	r27, 0x00	; 0
+ 4cc:	ed e2       	ldi	r30, 0x2D	; 45
+ 4ce:	f0 e0       	ldi	r31, 0x00	; 0
+ 4d0:	80 81       	ld	r24, Z
+ 4d2:	8f 7b       	andi	r24, 0xBF	; 191
+ 4d4:	8c 93       	st	X, r24
+ 4d6:	0c c0       	rjmp	.+24     	; 0x4f0 <SPI_u8InitConfig+0x3d2>
+		case SPI_ENABLE:  SET_BIT(SPCR , SPCR_SPE) ; break ;
+ 4d8:	ad e2       	ldi	r26, 0x2D	; 45
+ 4da:	b0 e0       	ldi	r27, 0x00	; 0
+ 4dc:	ed e2       	ldi	r30, 0x2D	; 45
+ 4de:	f0 e0       	ldi	r31, 0x00	; 0
+ 4e0:	80 81       	ld	r24, Z
+ 4e2:	80 64       	ori	r24, 0x40	; 64
+ 4e4:	8c 93       	st	X, r24
+ 4e6:	04 c0       	rjmp	.+8      	; 0x4f0 <SPI_u8InitConfig+0x3d2>
+		default:		  Local_u8ErrorState = ES_NOK ; break ;
+ 4e8:	19 82       	std	Y+1, r1	; 0x01
+ 4ea:	02 c0       	rjmp	.+4      	; 0x4f0 <SPI_u8InitConfig+0x3d2>
+		}
+	}
+	else
+	{
+		Local_u8ErrorState = ES_NULL_POINTER ;
+ 4ec:	82 e0       	ldi	r24, 0x02	; 2
+ 4ee:	89 83       	std	Y+1, r24	; 0x01
+	}
+	return Local_u8ErrorState ;
+ 4f0:	89 81       	ldd	r24, Y+1	; 0x01
+}
+ 4f2:	61 96       	adiw	r28, 0x11	; 17
+ 4f4:	0f b6       	in	r0, 0x3f	; 63
+ 4f6:	f8 94       	cli
+ 4f8:	de bf       	out	0x3e, r29	; 62
+ 4fa:	0f be       	out	0x3f, r0	; 63
+ 4fc:	cd bf       	out	0x3d, r28	; 61
+ 4fe:	cf 91       	pop	r28
+ 500:	df 91       	pop	r29
+ 502:	08 95       	ret
+
+00000504 <SPI_u8Tranceive>:
+
+ES_t SPI_u8Tranceive (u8 Copy_u8TData , u8 *Copy_u8RData)
+{
+ 504:	df 93       	push	r29
+ 506:	cf 93       	push	r28
+ 508:	00 d0       	rcall	.+0      	; 0x50a <SPI_u8Tranceive+0x6>
+ 50a:	00 d0       	rcall	.+0      	; 0x50c <SPI_u8Tranceive+0x8>
+ 50c:	0f 92       	push	r0
+ 50e:	cd b7       	in	r28, 0x3d	; 61
+ 510:	de b7       	in	r29, 0x3e	; 62
+ 512:	8b 83       	std	Y+3, r24	; 0x03
+ 514:	7d 83       	std	Y+5, r23	; 0x05
+ 516:	6c 83       	std	Y+4, r22	; 0x04
+	u8 Local_u8ErrorState = ES_OK ;
+ 518:	81 e0       	ldi	r24, 0x01	; 1
+ 51a:	8a 83       	std	Y+2, r24	; 0x02
+	u8 Local_uint32TimeoutCounter = 0 ;
+ 51c:	19 82       	std	Y+1, r1	; 0x01
+
+	if (SPI_u8State == IDLE)
+ 51e:	80 91 60 00 	lds	r24, 0x0060
+ 522:	81 30       	cpi	r24, 0x01	; 1
+ 524:	c9 f4       	brne	.+50     	; 0x558 <SPI_u8Tranceive+0x54>
+	{
+		SPI_u8State = BUSY ;
+ 526:	10 92 60 00 	sts	0x0060, r1
+
+		SPDR = Copy_u8TData ;
+ 52a:	ef e2       	ldi	r30, 0x2F	; 47
+ 52c:	f0 e0       	ldi	r31, 0x00	; 0
+ 52e:	8b 81       	ldd	r24, Y+3	; 0x03
+ 530:	80 83       	st	Z, r24
+
+		while (((GET_BIT(SPSR , SPSR_SPIF)) == 0) && (Local_uint32TimeoutCounter < SPI_uint32TIMEOUT))
+ 532:	ee e2       	ldi	r30, 0x2E	; 46
+ 534:	f0 e0       	ldi	r31, 0x00	; 0
+ 536:	80 81       	ld	r24, Z
+ 538:	88 23       	and	r24, r24
+ 53a:	24 f0       	brlt	.+8      	; 0x544 <SPI_u8Tranceive+0x40>
+		{
+			Local_uint32TimeoutCounter++ ;
+ 53c:	89 81       	ldd	r24, Y+1	; 0x01
+ 53e:	8f 5f       	subi	r24, 0xFF	; 255
+ 540:	89 83       	std	Y+1, r24	; 0x01
+ 542:	f7 cf       	rjmp	.-18     	; 0x532 <SPI_u8Tranceive+0x2e>
+		{
+			Local_u8ErrorState = ES_OUT_OF_RANGE ;
+		}
+		else
+		{
+			*Copy_u8RData = SPDR ;
+ 544:	ef e2       	ldi	r30, 0x2F	; 47
+ 546:	f0 e0       	ldi	r31, 0x00	; 0
+ 548:	80 81       	ld	r24, Z
+ 54a:	ec 81       	ldd	r30, Y+4	; 0x04
+ 54c:	fd 81       	ldd	r31, Y+5	; 0x05
+ 54e:	80 83       	st	Z, r24
+		}
+		SPI_u8State = IDLE ;
+ 550:	81 e0       	ldi	r24, 0x01	; 1
+ 552:	80 93 60 00 	sts	0x0060, r24
+ 556:	02 c0       	rjmp	.+4      	; 0x55c <SPI_u8Tranceive+0x58>
+	}
+	else
+	{
+		Local_u8ErrorState = ES_OUT_OF_RANGE ;
+ 558:	83 e0       	ldi	r24, 0x03	; 3
+ 55a:	8a 83       	std	Y+2, r24	; 0x02
+	}
+
+	return Local_u8ErrorState ;
+ 55c:	8a 81       	ldd	r24, Y+2	; 0x02
+}
+ 55e:	0f 90       	pop	r0
+ 560:	0f 90       	pop	r0
+ 562:	0f 90       	pop	r0
+ 564:	0f 90       	pop	r0
+ 566:	0f 90       	pop	r0
+ 568:	cf 91       	pop	r28
+ 56a:	df 91       	pop	r29
+ 56c:	08 95       	ret
+
+0000056e <SPI_u8BufferTranceiverSynch>:
+
+ES_t SPI_u8BufferTranceiverSynch (u8 *Copy_u8TData , u8 *Copy_u8RData , u8 Copy_u8BufferSize)
+{
+ 56e:	df 93       	push	r29
+ 570:	cf 93       	push	r28
+ 572:	cd b7       	in	r28, 0x3d	; 61
+ 574:	de b7       	in	r29, 0x3e	; 62
+ 576:	27 97       	sbiw	r28, 0x07	; 7
+ 578:	0f b6       	in	r0, 0x3f	; 63
+ 57a:	f8 94       	cli
+ 57c:	de bf       	out	0x3e, r29	; 62
+ 57e:	0f be       	out	0x3f, r0	; 63
+ 580:	cd bf       	out	0x3d, r28	; 61
+ 582:	9c 83       	std	Y+4, r25	; 0x04
+ 584:	8b 83       	std	Y+3, r24	; 0x03
+ 586:	7e 83       	std	Y+6, r23	; 0x06
+ 588:	6d 83       	std	Y+5, r22	; 0x05
+ 58a:	4f 83       	std	Y+7, r20	; 0x07
+	u8 Local_u8ErrorState = ES_OK ;
+ 58c:	81 e0       	ldi	r24, 0x01	; 1
+ 58e:	8a 83       	std	Y+2, r24	; 0x02
+	u8 Local_u8Counter = 0 ;
+ 590:	19 82       	std	Y+1, r1	; 0x01
+	if ((Copy_u8TData != NULL) && (Copy_u8RData != NULL))
+ 592:	8b 81       	ldd	r24, Y+3	; 0x03
+ 594:	9c 81       	ldd	r25, Y+4	; 0x04
+ 596:	00 97       	sbiw	r24, 0x00	; 0
+ 598:	09 f1       	breq	.+66     	; 0x5dc <SPI_u8BufferTranceiverSynch+0x6e>
+ 59a:	8d 81       	ldd	r24, Y+5	; 0x05
+ 59c:	9e 81       	ldd	r25, Y+6	; 0x06
+ 59e:	00 97       	sbiw	r24, 0x00	; 0
+ 5a0:	e9 f0       	breq	.+58     	; 0x5dc <SPI_u8BufferTranceiverSynch+0x6e>
+ 5a2:	17 c0       	rjmp	.+46     	; 0x5d2 <SPI_u8BufferTranceiverSynch+0x64>
+	{
+		while (Local_u8Counter < Copy_u8BufferSize)
+		{
+			SPI_u8Tranceive(Copy_u8TData[Local_u8Counter] , &Copy_u8RData[Local_u8Counter]) ;
+ 5a4:	89 81       	ldd	r24, Y+1	; 0x01
+ 5a6:	28 2f       	mov	r18, r24
+ 5a8:	30 e0       	ldi	r19, 0x00	; 0
+ 5aa:	8b 81       	ldd	r24, Y+3	; 0x03
+ 5ac:	9c 81       	ldd	r25, Y+4	; 0x04
+ 5ae:	fc 01       	movw	r30, r24
+ 5b0:	e2 0f       	add	r30, r18
+ 5b2:	f3 1f       	adc	r31, r19
+ 5b4:	40 81       	ld	r20, Z
+ 5b6:	89 81       	ldd	r24, Y+1	; 0x01
+ 5b8:	28 2f       	mov	r18, r24
+ 5ba:	30 e0       	ldi	r19, 0x00	; 0
+ 5bc:	8d 81       	ldd	r24, Y+5	; 0x05
+ 5be:	9e 81       	ldd	r25, Y+6	; 0x06
+ 5c0:	28 0f       	add	r18, r24
+ 5c2:	39 1f       	adc	r19, r25
+ 5c4:	84 2f       	mov	r24, r20
+ 5c6:	b9 01       	movw	r22, r18
+ 5c8:	0e 94 82 02 	call	0x504	; 0x504 <SPI_u8Tranceive>
+			Local_u8Counter++ ;
+ 5cc:	89 81       	ldd	r24, Y+1	; 0x01
+ 5ce:	8f 5f       	subi	r24, 0xFF	; 255
+ 5d0:	89 83       	std	Y+1, r24	; 0x01
+{
+	u8 Local_u8ErrorState = ES_OK ;
+	u8 Local_u8Counter = 0 ;
+	if ((Copy_u8TData != NULL) && (Copy_u8RData != NULL))
+	{
+		while (Local_u8Counter < Copy_u8BufferSize)
+ 5d2:	99 81       	ldd	r25, Y+1	; 0x01
+ 5d4:	8f 81       	ldd	r24, Y+7	; 0x07
+ 5d6:	98 17       	cp	r25, r24
+ 5d8:	28 f3       	brcs	.-54     	; 0x5a4 <SPI_u8BufferTranceiverSynch+0x36>
+ 5da:	02 c0       	rjmp	.+4      	; 0x5e0 <SPI_u8BufferTranceiverSynch+0x72>
+			Local_u8Counter++ ;
+		}
+	}
+	else
+	{
+		Local_u8ErrorState = ES_NULL_POINTER ;
+ 5dc:	82 e0       	ldi	r24, 0x02	; 2
+ 5de:	8a 83       	std	Y+2, r24	; 0x02
+	}
+	return Local_u8ErrorState ;
+ 5e0:	8a 81       	ldd	r24, Y+2	; 0x02
+}
+ 5e2:	27 96       	adiw	r28, 0x07	; 7
+ 5e4:	0f b6       	in	r0, 0x3f	; 63
+ 5e6:	f8 94       	cli
+ 5e8:	de bf       	out	0x3e, r29	; 62
+ 5ea:	0f be       	out	0x3f, r0	; 63
+ 5ec:	cd bf       	out	0x3d, r28	; 61
+ 5ee:	cf 91       	pop	r28
+ 5f0:	df 91       	pop	r29
+ 5f2:	08 95       	ret
+
+000005f4 <SPI_u8BufferTranceiverAsynch>:
+
+ES_t SPI_u8BufferTranceiverAsynch (SPI_BUFFER *spi_buffer)
+{
+ 5f4:	df 93       	push	r29
+ 5f6:	cf 93       	push	r28
+ 5f8:	00 d0       	rcall	.+0      	; 0x5fa <SPI_u8BufferTranceiverAsynch+0x6>
+ 5fa:	0f 92       	push	r0
+ 5fc:	cd b7       	in	r28, 0x3d	; 61
+ 5fe:	de b7       	in	r29, 0x3e	; 62
+ 600:	9b 83       	std	Y+3, r25	; 0x03
+ 602:	8a 83       	std	Y+2, r24	; 0x02
+	u8 Local_u8ErrorState = ES_OK ;
+ 604:	81 e0       	ldi	r24, 0x01	; 1
+ 606:	89 83       	std	Y+1, r24	; 0x01
+
+	if (SPI_u8State == IDLE)
+ 608:	80 91 60 00 	lds	r24, 0x0060
+ 60c:	81 30       	cpi	r24, 0x01	; 1
+ 60e:	09 f0       	breq	.+2      	; 0x612 <SPI_u8BufferTranceiverAsynch+0x1e>
+ 610:	54 c0       	rjmp	.+168    	; 0x6ba <SPI_u8BufferTranceiverAsynch+0xc6>
+	{
+		if ((spi_buffer != NULL) && (spi_buffer->Copy_u8TData != NULL) && (spi_buffer->Copy_u8RData != NULL) && (spi_buffer->NotificationFuncn != NULL))
+ 612:	8a 81       	ldd	r24, Y+2	; 0x02
+ 614:	9b 81       	ldd	r25, Y+3	; 0x03
+ 616:	00 97       	sbiw	r24, 0x00	; 0
+ 618:	09 f4       	brne	.+2      	; 0x61c <SPI_u8BufferTranceiverAsynch+0x28>
+ 61a:	4c c0       	rjmp	.+152    	; 0x6b4 <SPI_u8BufferTranceiverAsynch+0xc0>
+ 61c:	ea 81       	ldd	r30, Y+2	; 0x02
+ 61e:	fb 81       	ldd	r31, Y+3	; 0x03
+ 620:	80 81       	ld	r24, Z
+ 622:	91 81       	ldd	r25, Z+1	; 0x01
+ 624:	00 97       	sbiw	r24, 0x00	; 0
+ 626:	09 f4       	brne	.+2      	; 0x62a <SPI_u8BufferTranceiverAsynch+0x36>
+ 628:	45 c0       	rjmp	.+138    	; 0x6b4 <SPI_u8BufferTranceiverAsynch+0xc0>
+ 62a:	ea 81       	ldd	r30, Y+2	; 0x02
+ 62c:	fb 81       	ldd	r31, Y+3	; 0x03
+ 62e:	82 81       	ldd	r24, Z+2	; 0x02
+ 630:	93 81       	ldd	r25, Z+3	; 0x03
+ 632:	00 97       	sbiw	r24, 0x00	; 0
+ 634:	09 f4       	brne	.+2      	; 0x638 <SPI_u8BufferTranceiverAsynch+0x44>
+ 636:	3e c0       	rjmp	.+124    	; 0x6b4 <SPI_u8BufferTranceiverAsynch+0xc0>
+ 638:	ea 81       	ldd	r30, Y+2	; 0x02
+ 63a:	fb 81       	ldd	r31, Y+3	; 0x03
+ 63c:	85 81       	ldd	r24, Z+5	; 0x05
+ 63e:	96 81       	ldd	r25, Z+6	; 0x06
+ 640:	00 97       	sbiw	r24, 0x00	; 0
+ 642:	c1 f1       	breq	.+112    	; 0x6b4 <SPI_u8BufferTranceiverAsynch+0xc0>
+		{
+			SPI_u8State = BUSY ;
+ 644:	10 92 60 00 	sts	0x0060, r1
+
+			SPI_pu8TData = spi_buffer->Copy_u8TData ;
+ 648:	ea 81       	ldd	r30, Y+2	; 0x02
+ 64a:	fb 81       	ldd	r31, Y+3	; 0x03
+ 64c:	80 81       	ld	r24, Z
+ 64e:	91 81       	ldd	r25, Z+1	; 0x01
+ 650:	90 93 63 00 	sts	0x0063, r25
+ 654:	80 93 62 00 	sts	0x0062, r24
+			SPI_pu8RData = spi_buffer->Copy_u8RData ;
+ 658:	ea 81       	ldd	r30, Y+2	; 0x02
+ 65a:	fb 81       	ldd	r31, Y+3	; 0x03
+ 65c:	82 81       	ldd	r24, Z+2	; 0x02
+ 65e:	93 81       	ldd	r25, Z+3	; 0x03
+ 660:	90 93 65 00 	sts	0x0065, r25
+ 664:	80 93 64 00 	sts	0x0064, r24
+			SPI_u8BufferSize = spi_buffer->Copy_u8BufferSize ;
+ 668:	ea 81       	ldd	r30, Y+2	; 0x02
+ 66a:	fb 81       	ldd	r31, Y+3	; 0x03
+ 66c:	84 81       	ldd	r24, Z+4	; 0x04
+ 66e:	80 93 68 00 	sts	0x0068, r24
+			SPI_pvNotificationFunc = spi_buffer->NotificationFuncn ;
+ 672:	ea 81       	ldd	r30, Y+2	; 0x02
+ 674:	fb 81       	ldd	r31, Y+3	; 0x03
+ 676:	85 81       	ldd	r24, Z+5	; 0x05
+ 678:	96 81       	ldd	r25, Z+6	; 0x06
+ 67a:	90 93 67 00 	sts	0x0067, r25
+ 67e:	80 93 66 00 	sts	0x0066, r24
+
+			SPI_u8Index = 0 ;
+ 682:	10 92 69 00 	sts	0x0069, r1
+
+			SPDR = SPI_pu8TData[SPI_u8Index] ;
+ 686:	af e2       	ldi	r26, 0x2F	; 47
+ 688:	b0 e0       	ldi	r27, 0x00	; 0
+ 68a:	20 91 62 00 	lds	r18, 0x0062
+ 68e:	30 91 63 00 	lds	r19, 0x0063
+ 692:	80 91 69 00 	lds	r24, 0x0069
+ 696:	88 2f       	mov	r24, r24
+ 698:	90 e0       	ldi	r25, 0x00	; 0
+ 69a:	f9 01       	movw	r30, r18
+ 69c:	e8 0f       	add	r30, r24
+ 69e:	f9 1f       	adc	r31, r25
+ 6a0:	80 81       	ld	r24, Z
+ 6a2:	8c 93       	st	X, r24
+
+			SET_BIT(SPCR , SPCR_SPIE) ;
+ 6a4:	ad e2       	ldi	r26, 0x2D	; 45
+ 6a6:	b0 e0       	ldi	r27, 0x00	; 0
+ 6a8:	ed e2       	ldi	r30, 0x2D	; 45
+ 6aa:	f0 e0       	ldi	r31, 0x00	; 0
+ 6ac:	80 81       	ld	r24, Z
+ 6ae:	80 68       	ori	r24, 0x80	; 128
+ 6b0:	8c 93       	st	X, r24
+ 6b2:	05 c0       	rjmp	.+10     	; 0x6be <SPI_u8BufferTranceiverAsynch+0xca>
+		}
+		else
+		{
+			Local_u8ErrorState = ES_NULL_POINTER ;
+ 6b4:	82 e0       	ldi	r24, 0x02	; 2
+ 6b6:	89 83       	std	Y+1, r24	; 0x01
+ 6b8:	02 c0       	rjmp	.+4      	; 0x6be <SPI_u8BufferTranceiverAsynch+0xca>
+		}
+	}
+	else
+	{
+		Local_u8ErrorState = ES_OUT_OF_RANGE ;
+ 6ba:	83 e0       	ldi	r24, 0x03	; 3
+ 6bc:	89 83       	std	Y+1, r24	; 0x01
+	}
+	return Local_u8ErrorState ;
+ 6be:	89 81       	ldd	r24, Y+1	; 0x01
+}
+ 6c0:	0f 90       	pop	r0
+ 6c2:	0f 90       	pop	r0
+ 6c4:	0f 90       	pop	r0
+ 6c6:	cf 91       	pop	r28
+ 6c8:	df 91       	pop	r29
+ 6ca:	08 95       	ret
+
+000006cc <__vector_12>:
+
+void __vector_12 (void)		__attribute__ ((signal)) ;
+void __vector_12 (void)
+{
+ 6cc:	1f 92       	push	r1
+ 6ce:	0f 92       	push	r0
+ 6d0:	0f b6       	in	r0, 0x3f	; 63
+ 6d2:	0f 92       	push	r0
+ 6d4:	11 24       	eor	r1, r1
+ 6d6:	2f 93       	push	r18
+ 6d8:	3f 93       	push	r19
+ 6da:	4f 93       	push	r20
+ 6dc:	5f 93       	push	r21
+ 6de:	6f 93       	push	r22
+ 6e0:	7f 93       	push	r23
+ 6e2:	8f 93       	push	r24
+ 6e4:	9f 93       	push	r25
+ 6e6:	af 93       	push	r26
+ 6e8:	bf 93       	push	r27
+ 6ea:	ef 93       	push	r30
+ 6ec:	ff 93       	push	r31
+ 6ee:	df 93       	push	r29
+ 6f0:	cf 93       	push	r28
+ 6f2:	cd b7       	in	r28, 0x3d	; 61
+ 6f4:	de b7       	in	r29, 0x3e	; 62
+	SPI_pu8RData[SPI_u8Index] = SPDR ;
+ 6f6:	20 91 64 00 	lds	r18, 0x0064
+ 6fa:	30 91 65 00 	lds	r19, 0x0065
+ 6fe:	80 91 69 00 	lds	r24, 0x0069
+ 702:	88 2f       	mov	r24, r24
+ 704:	90 e0       	ldi	r25, 0x00	; 0
+ 706:	d9 01       	movw	r26, r18
+ 708:	a8 0f       	add	r26, r24
+ 70a:	b9 1f       	adc	r27, r25
+ 70c:	ef e2       	ldi	r30, 0x2F	; 47
+ 70e:	f0 e0       	ldi	r31, 0x00	; 0
+ 710:	80 81       	ld	r24, Z
+ 712:	8c 93       	st	X, r24
+
+	SPI_u8Index++ ;
+ 714:	80 91 69 00 	lds	r24, 0x0069
+ 718:	8f 5f       	subi	r24, 0xFF	; 255
+ 71a:	80 93 69 00 	sts	0x0069, r24
+
+	if (SPI_u8Index == SPI_u8BufferSize)
+ 71e:	90 91 69 00 	lds	r25, 0x0069
+ 722:	80 91 68 00 	lds	r24, 0x0068
+ 726:	98 17       	cp	r25, r24
+ 728:	81 f4       	brne	.+32     	; 0x74a <__vector_12+0x7e>
+	{
+		SPI_u8State = IDLE ;
+ 72a:	81 e0       	ldi	r24, 0x01	; 1
+ 72c:	80 93 60 00 	sts	0x0060, r24
+
+		CLR_BIT(SPCR , SPCR_SPIE) ;
+ 730:	ad e2       	ldi	r26, 0x2D	; 45
+ 732:	b0 e0       	ldi	r27, 0x00	; 0
+ 734:	ed e2       	ldi	r30, 0x2D	; 45
+ 736:	f0 e0       	ldi	r31, 0x00	; 0
+ 738:	80 81       	ld	r24, Z
+ 73a:	8f 77       	andi	r24, 0x7F	; 127
+ 73c:	8c 93       	st	X, r24
+
+		SPI_pvNotificationFunc() ;
+ 73e:	e0 91 66 00 	lds	r30, 0x0066
+ 742:	f0 91 67 00 	lds	r31, 0x0067
+ 746:	09 95       	icall
+ 748:	0f c0       	rjmp	.+30     	; 0x768 <__vector_12+0x9c>
+	}
+	else
+	{
+		SPDR = SPI_pu8TData[SPI_u8Index] ;
+ 74a:	af e2       	ldi	r26, 0x2F	; 47
+ 74c:	b0 e0       	ldi	r27, 0x00	; 0
+ 74e:	20 91 62 00 	lds	r18, 0x0062
+ 752:	30 91 63 00 	lds	r19, 0x0063
+ 756:	80 91 69 00 	lds	r24, 0x0069
+ 75a:	88 2f       	mov	r24, r24
+ 75c:	90 e0       	ldi	r25, 0x00	; 0
+ 75e:	f9 01       	movw	r30, r18
+ 760:	e8 0f       	add	r30, r24
+ 762:	f9 1f       	adc	r31, r25
+ 764:	80 81       	ld	r24, Z
+ 766:	8c 93       	st	X, r24
+	}
+}
+ 768:	cf 91       	pop	r28
+ 76a:	df 91       	pop	r29
+ 76c:	ff 91       	pop	r31
+ 76e:	ef 91       	pop	r30
+ 770:	bf 91       	pop	r27
+ 772:	af 91       	pop	r26
+ 774:	9f 91       	pop	r25
+ 776:	8f 91       	pop	r24
+ 778:	7f 91       	pop	r23
+ 77a:	6f 91       	pop	r22
+ 77c:	5f 91       	pop	r21
+ 77e:	4f 91       	pop	r20
+ 780:	3f 91       	pop	r19
+ 782:	2f 91       	pop	r18
+ 784:	0f 90       	pop	r0
+ 786:	0f be       	out	0x3f, r0	; 63
+ 788:	0f 90       	pop	r0
+ 78a:	1f 90       	pop	r1
+ 78c:	18 95       	reti
+
+0000078e <main>:
+ */
+
+#include "SPI_Configuration.h"
+
+int main()
+{
+ 78e:	df 93       	push	r29
+ 790:	cf 93       	push	r28
+ 792:	cd b7       	in	r28, 0x3d	; 61
+ 794:	de b7       	in	r29, 0x3e	; 62
+
+	return 0;
+ 796:	80 e0       	ldi	r24, 0x00	; 0
+ 798:	90 e0       	ldi	r25, 0x00	; 0
+}
+ 79a:	cf 91       	pop	r28
+ 79c:	df 91       	pop	r29
+ 79e:	08 95       	ret
+
+000007a0 <_exit>:
+ 7a0:	f8 94       	cli
+
+000007a2 <__stop_program>:
+ 7a2:	ff cf       	rjmp	.-2      	; 0x7a2 <__stop_program>
